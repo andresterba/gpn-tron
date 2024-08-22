@@ -18,6 +18,12 @@ func determineType(handlers map[string]protocolHandler, data string) {
 	dataInput := strings.Join(splittedData[1:], "|")
 	safeString := strings.ReplaceAll(dataInput, "\n", "")
 
+	_, ok := handlers[protocolType]
+	if !ok {
+		fmt.Printf("Unknown protocol type: %s\n", protocolType)
+		return
+	}
+
 	handlers[protocolType](safeString)
 }
 
@@ -29,7 +35,7 @@ func handleError(data string) {
 	fmt.Printf("TYPE: error\t PAYLOAD: %s\n", data)
 }
 
-func login(username, password string) {
+func join(username, password string) {
 	loginContent := fmt.Sprintf("join|%s|%s\n", username, password)
 
 	_, err := Write(conn, loginContent)
@@ -166,4 +172,17 @@ func handleWin(data string) {
 	positionData := fmt.Sprintf("win: %s lose: %s", amountWin, amountLose)
 
 	fmt.Printf("TYPE: win\t PAYLOAD: %s\n", positionData)
+}
+
+func handlePlayerMessage(data string) {
+	// message|5|I am so cool
+	//fmt.Printf("TYPE: player\t PAYLOAD: %s\n", data)
+
+	splittedData := strings.Split(data, "|")
+	playerID := splittedData[0]
+	playerName := splittedData[1]
+
+	message := fmt.Sprintf("playerID: %s playerName: %s", playerID, playerName)
+
+	fmt.Printf("TYPE: player\t PAYLOAD: %s\n", message)
 }

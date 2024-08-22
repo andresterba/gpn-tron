@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	SERVER_ADDR = "gpn-tron.duckdns.org:4000"
-	//SERVER_ADDR      = "localhost:4000"
-	DELIMITER byte = '\n'
-	OCCUPIED       = "X"
-	FREE           = "O"
+	//SERVER_ADDR = "gpn-tron.duckdns.org:4000"
+	SERVER_ADDR      = "localhost:4000"
+	DELIMITER   byte = '\n'
+	OCCUPIED         = "X"
+	FREE             = "O"
 )
 
 var (
@@ -32,7 +32,7 @@ func main() {
 	game.DeadPlayerIDs = []int{}
 
 	Username = getEnviromentVariableOrDefaultAsString("BOT_USERNAME", "test-user")
-	Password = getEnviromentVariableOrDefaultAsString("PASSWORD", "1337")
+	Password = getEnviromentVariableOrDefaultAsString("PASSWORD", "Hallo123")
 
 	myPlayer = Player{}
 
@@ -53,9 +53,10 @@ func main() {
 		"lose":    handleLose,
 		"win":     handleWin,
 		"message": handleMessage,
+		"player":  handlePlayerMessage,
 	}
 
-	login(Username, Password)
+	join(Username, Password)
 
 	reader := bufio.NewReader(connection)
 	for {
